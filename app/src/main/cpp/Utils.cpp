@@ -148,10 +148,21 @@ GLuint CreateTextureFromFile(const char *path){
     int file_size=0;
     unsigned char* filecontent=LoadFileContent(path,file_size);
     int image_width,image_height,channel_count;
-    unsigned char * rgb_pixel = stbi_bmp_load_from_memory(filecontent,file_size,&image_width,&image_height,&channel_count,0);
-    FlipImage(rgb_pixel,image_width,image_height,channel_count);
-    GLuint texture=CreateTexture2D(rgb_pixel,image_width,image_height,GL_RGB,GL_RGB);
-    delete [] rgb_pixel;
+    unsigned char * pixel= nullptr;
+    if(strcmp(path+(strlen(path)-4),".png")==0){
+        pixel=stbi_png_load_from_memory(filecontent,file_size,&image_width,&image_height,&channel_count,0);
+    }else if(strcmp(path+(strlen(path)-4),".bmp")==0){
+        pixel=stbi_bmp_load_from_memory(filecontent,file_size,&image_width,&image_height,&channel_count,0);
+    }else{
+        delete [] filecontent;
+        return 0;
+    }
+//    __android_log_print(ANDROID_LOG_INFO,ALICE_LOG_TAG,"CreateTextureFromFile %dx%d %d filesize(%d)",
+//                        image_width,image_height,channel_count,file_size);
+    FlipImage(pixel,image_width,image_height,channel_count);
+    GLenum pixel_format=channel_count==3?GL_RGB:GL_RGBA;
+    GLuint texture=CreateTexture2D(pixel,image_width,image_height,pixel_format,pixel_format);
+    delete [] pixel;
     delete [] filecontent;
     return texture;
 }

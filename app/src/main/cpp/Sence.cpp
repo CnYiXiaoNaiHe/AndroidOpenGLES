@@ -87,7 +87,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_example_learnogles_MainActivity_Init(
     imagesizeLocation=glGetUniformLocation(program,"U_ImageSize");
     projectionMatrixLocation=glGetUniformLocation(program,"U_ProjectionMatrix");
 
-    texture=CreateTextureFromFile("front.bmp");
+    texture=CreateTextureFromFile("head.png");
     __android_log_print(ANDROID_LOG_INFO,HANGYU_LOG_TAG,"%d,%d,%d,%d",
                         attrPositionLocation,modelMatrixLocation,viewMatrixLocation,projectionMatrixLocation);
 }
