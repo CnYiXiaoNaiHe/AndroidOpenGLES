@@ -30,8 +30,11 @@ extern "C" JNIEXPORT void JNICALL Java_com_example_learnogles_MainActivity_Init(
     glClearColor(0.6f,0.4f,0.1f,1.0f);
     Vertice vertices[4];//cpu -> gpu
 
-    vertices[0].mPosition[0]=-256.0f;//x
-    vertices[0].mPosition[1]=-256.0f;//y
+
+    float scale = 4.0f;
+
+    vertices[0].mPosition[0]=-128.0f * scale;//x
+    vertices[0].mPosition[1]=-128.0f * scale;//y
     vertices[0].mPosition[2]=0.0f;//z
     vertices[0].mPosition[3]=1.0f;//w
     vertices[0].mTexcoord[0]=0.0f;//u
@@ -39,8 +42,8 @@ extern "C" JNIEXPORT void JNICALL Java_com_example_learnogles_MainActivity_Init(
     vertices[0].mTexcoord[2]=0.0f;//
     vertices[0].mTexcoord[3]=0.0f;//
 
-    vertices[1].mPosition[0]=256.0f;//x
-    vertices[1].mPosition[1]=-256.0f;//y
+    vertices[1].mPosition[0]=128.0f * scale;//x
+    vertices[1].mPosition[1]=-128.0f * scale;//y
     vertices[1].mPosition[2]=0.0f;//z
     vertices[1].mPosition[3]=1.0f;//w
     vertices[1].mTexcoord[0]=1.0f;//u
@@ -48,8 +51,8 @@ extern "C" JNIEXPORT void JNICALL Java_com_example_learnogles_MainActivity_Init(
     vertices[1].mTexcoord[2]=0.0f;//
     vertices[1].mTexcoord[3]=0.0f;//
 
-    vertices[2].mPosition[0]=-256.0f;//x
-    vertices[2].mPosition[1]=256.0f;//y
+    vertices[2].mPosition[0]=-128.0f * scale;//x
+    vertices[2].mPosition[1]=128.0f * scale;//y
     vertices[2].mPosition[2]=0.0f;//z
     vertices[2].mPosition[3]=1.0f;//w
     vertices[2].mTexcoord[0]=0.0f;//u
@@ -57,8 +60,8 @@ extern "C" JNIEXPORT void JNICALL Java_com_example_learnogles_MainActivity_Init(
     vertices[2].mTexcoord[2]=0.0f;//
     vertices[2].mTexcoord[3]=0.0f;//
 
-    vertices[3].mPosition[0]=256.0f;//x
-    vertices[3].mPosition[1]=256.0f;//y
+    vertices[3].mPosition[0]=128.0f * scale;//x
+    vertices[3].mPosition[1]=128.0f * scale;//y
     vertices[3].mPosition[2]=0.0f;//z
     vertices[3].mPosition[3]=1.0f;//w
     vertices[3].mTexcoord[0]=1.0f;//u

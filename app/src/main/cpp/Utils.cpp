@@ -3,6 +3,7 @@
 //
 
 #include "Utils.h"
+#include "stb_image_aug.h"
 float GetFrameTime(){
     static unsigned long long lastTime=0,currentTime=0;
     timeval current;
@@ -78,6 +79,45 @@ void SwapPixelRB(unsigned char * pixel,int pixel_data_offset){//bgr -> rgb
     pixel[pixel_data_offset]=pixel[pixel_data_offset+2];
     pixel[pixel_data_offset+2]=b;
 }
+void SwapRGBPixel(unsigned char * pixel,int src0,int src1){
+    unsigned char src0_r=pixel[src0];
+    unsigned char src0_g=pixel[src0+1];
+    unsigned char src0_b=pixel[src0+2];
+    pixel[src0]=pixel[src1];
+    pixel[src0+1]=pixel[src1+1];
+    pixel[src0+2]=pixel[src1+2];
+    pixel[src1]=src0_r;
+    pixel[src1+1]=src0_g;
+    pixel[src1+2]=src0_b;
+}
+void SwapRGBAPixel(unsigned char * pixel,int src0,int src1){
+    unsigned char src0_r=pixel[src0];
+    unsigned char src0_g=pixel[src0+1];
+    unsigned char src0_b=pixel[src0+2];
+    unsigned char src0_a=pixel[src0+3];
+    pixel[src0]=pixel[src1];
+    pixel[src0+1]=pixel[src1+1];
+    pixel[src0+2]=pixel[src1+2];
+    pixel[src0+3]=pixel[src1+3];
+    pixel[src1]=src0_r;
+    pixel[src1+1]=src0_g;
+    pixel[src1+2]=src0_b;
+    pixel[src1+3]=src0_a;
+}
+void FlipImage(unsigned char * pixel,int width,int height,int channel_count){
+    int half_height=height/2;
+    for (int y = 0; y < half_height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            int bottom_pixel_index=y*width+x;
+            int top_pixel_index=(height-y-1)*width+x;
+            if(channel_count==3){
+                SwapRGBPixel(pixel,top_pixel_index*3,bottom_pixel_index*3);
+            }else if(channel_count==4){
+                SwapRGBAPixel(pixel,top_pixel_index*4,bottom_pixel_index*4);
+            }
+        }
+    }
+}
 unsigned char * DecodeBMP(unsigned char *bmp_file_content,int&width,int&height){
     if(0x4D42==*((unsigned short*)bmp_file_content)){
         int pixel_data_offset=*((int*)(bmp_file_content+10));
@@ -107,9 +147,11 @@ GLuint CreateTexture2D(void*pixel,int width,int height,GLenum gpu_format,GLenum 
 GLuint CreateTextureFromFile(const char *path){
     int file_size=0;
     unsigned char* filecontent=LoadFileContent(path,file_size);
-    int image_width,image_height;
-    unsigned char * rgb_pixel=DecodeBMP(filecontent,image_width,image_height);
+    int image_width,image_height,channel_count;
+    unsigned char * rgb_pixel = stbi_bmp_load_from_memory(filecontent,file_size,&image_width,&image_height,&channel_count,0);
+    FlipImage(rgb_pixel,image_width,image_height,channel_count);
     GLuint texture=CreateTexture2D(rgb_pixel,image_width,image_height,GL_RGB,GL_RGB);
+    delete [] rgb_pixel;
     delete [] filecontent;
     return texture;
 }
