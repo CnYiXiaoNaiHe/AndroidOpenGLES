@@ -30,8 +30,8 @@ extern "C" JNIEXPORT void JNICALL Java_com_example_learnogles_MainActivity_Init(
     glClearColor(0.6f,0.4f,0.1f,1.0f);
     Vertice vertices[4];//cpu -> gpu
 
-    vertices[0].mPosition[0]=-128.0f;//x
-    vertices[0].mPosition[1]=-128.0f;//y
+    vertices[0].mPosition[0]=-256.0f;//x
+    vertices[0].mPosition[1]=-256.0f;//y
     vertices[0].mPosition[2]=0.0f;//z
     vertices[0].mPosition[3]=1.0f;//w
     vertices[0].mTexcoord[0]=0.0f;//u
@@ -39,8 +39,8 @@ extern "C" JNIEXPORT void JNICALL Java_com_example_learnogles_MainActivity_Init(
     vertices[0].mTexcoord[2]=0.0f;//
     vertices[0].mTexcoord[3]=0.0f;//
 
-    vertices[1].mPosition[0]=128.0f;//x
-    vertices[1].mPosition[1]=-128.0f;//y
+    vertices[1].mPosition[0]=256.0f;//x
+    vertices[1].mPosition[1]=-256.0f;//y
     vertices[1].mPosition[2]=0.0f;//z
     vertices[1].mPosition[3]=1.0f;//w
     vertices[1].mTexcoord[0]=1.0f;//u
@@ -48,8 +48,8 @@ extern "C" JNIEXPORT void JNICALL Java_com_example_learnogles_MainActivity_Init(
     vertices[1].mTexcoord[2]=0.0f;//
     vertices[1].mTexcoord[3]=0.0f;//
 
-    vertices[2].mPosition[0]=-128.0f;//x
-    vertices[2].mPosition[1]=128.0f;//y
+    vertices[2].mPosition[0]=-256.0f;//x
+    vertices[2].mPosition[1]=256.0f;//y
     vertices[2].mPosition[2]=0.0f;//z
     vertices[2].mPosition[3]=1.0f;//w
     vertices[2].mTexcoord[0]=0.0f;//u
@@ -57,8 +57,8 @@ extern "C" JNIEXPORT void JNICALL Java_com_example_learnogles_MainActivity_Init(
     vertices[2].mTexcoord[2]=0.0f;//
     vertices[2].mTexcoord[3]=0.0f;//
 
-    vertices[3].mPosition[0]=128.0f;//x
-    vertices[3].mPosition[1]=128.0f;//y
+    vertices[3].mPosition[0]=256.0f;//x
+    vertices[3].mPosition[1]=256.0f;//y
     vertices[3].mPosition[2]=0.0f;//z
     vertices[3].mPosition[3]=1.0f;//w
     vertices[3].mTexcoord[0]=1.0f;//u
@@ -66,7 +66,10 @@ extern "C" JNIEXPORT void JNICALL Java_com_example_learnogles_MainActivity_Init(
     vertices[3].mTexcoord[2]=0.0f;//
     vertices[3].mTexcoord[3]=0.0f;//
 
+
+    //向z轴负方向推进，显示图像
     modelMatrix=glm::translate(0.0f,0.0f,-1.0f);
+
     modelMatrix2=glm::translate(50.0f,0.0f,-2.0f);
 
     unsigned short indexes[]={ 0,1,2,1,3,2};
@@ -95,6 +98,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_example_learnogles_MainActivity_OnVie
                            glm::vec3(0.0,1.0f,0.0f));
     float half_width=float(width)/2.0f;
     float half_height=float(height)/2.0f;
+    //正交投影，按照屏幕像素点绘制
     projectionMatrix=glm::ortho(-half_width,half_width,-half_height,half_height,0.1f,100.0f);
 }
 extern "C" JNIEXPORT void JNICALL Java_com_example_learnogles_MainActivity_Render(
@@ -105,6 +109,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_example_learnogles_MainActivity_Rende
     glBindBuffer(GL_ARRAY_BUFFER,vbo);
     glUseProgram(program);
     glEnable(GL_DEPTH_TEST);
+    //设置激活的纹理单元
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,texture);//设置纹理
     glUniform1i(glGetUniformLocation(program,"U_Texture"),0);
