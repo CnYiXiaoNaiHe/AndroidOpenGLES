@@ -4,7 +4,7 @@ static AAssetManager *sAssetManager= nullptr;
 GLuint vbo;//vertex buffer object
 GLuint ibo;//index buffer object ,element array buffer object
 GLuint program;
-GLint modelMatrixLocation,viewMatrixLocation,projectionMatrixLocation;
+GLint modelMatrixLocation,viewMatrixLocation,projectionMatrixLocation,imagesizeLocation;
 GLint attrPositionLocation,attrTexCoordLocation;
 GLuint texture;
 glm::mat4 modelMatrix,viewMatrix,projectionMatrix,modelMatrix2;
@@ -76,11 +76,12 @@ extern "C" JNIEXPORT void JNICALL Java_com_example_learnogles_MainActivity_Init(
     ibo=CreateBufferObject(GL_ELEMENT_ARRAY_BUFFER,indexes,sizeof(unsigned short)*6,GL_STATIC_DRAW);
     vbo=CreateBufferObject(GL_ARRAY_BUFFER,vertices,sizeof(Vertice)*4,GL_STATIC_DRAW);
 
-    program=CreateStandardProgram("test.vs","test.fs");
+    program=CreateStandardProgram("test.vs","blur.fs");
     attrPositionLocation=glGetAttribLocation(program,"position");
     attrTexCoordLocation=glGetAttribLocation(program,"texcoord");
     modelMatrixLocation=glGetUniformLocation(program,"U_ModelMatrix");
     viewMatrixLocation=glGetUniformLocation(program,"U_ViewMatrix");
+    imagesizeLocation=glGetUniformLocation(program,"U_ImageSize");
     projectionMatrixLocation=glGetUniformLocation(program,"U_ProjectionMatrix");
 
     texture=CreateTextureFromFile("front.bmp");
@@ -116,6 +117,11 @@ extern "C" JNIEXPORT void JNICALL Java_com_example_learnogles_MainActivity_Rende
     glUniformMatrix4fv(modelMatrixLocation,1,GL_FALSE,glm::value_ptr(modelMatrix));
     glUniformMatrix4fv(viewMatrixLocation,1,GL_FALSE,glm::value_ptr(viewMatrix));
     glUniformMatrix4fv(projectionMatrixLocation,1,GL_FALSE,glm::value_ptr(projectionMatrix));
+
+    //传入图片大小
+    float imagetsize[]={256.0f,256.0f,0.0f,0.0f};
+    glUniform4fv(imagesizeLocation,1,imagetsize);
+
     //set attribute
     glEnableVertexAttribArray(attrPositionLocation);
     glVertexAttribPointer(attrPositionLocation,4,GL_FLOAT,GL_FALSE,sizeof(Vertice),0);
